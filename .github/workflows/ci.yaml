@@ -47,13 +47,6 @@ jobs:
           sudo mount -o remount,size=3G /run/user/1001 || true
           nix-shell --run 'make TAG=${{steps.commitid.outputs.short}} dist'
 
-      - name: Publish Hook
-        if: github.ref == 'refs/heads/main'
-        run: |
-          # Build and push the container images
-          nix-shell --run 'make TAG=${{steps.commitid.outputs.short}} push'
-          nix-shell --run 'make TAG=latest push'
-
       - uses: actions/upload-artifact@v3
         with:
           name: hook-${{steps.commitid.outputs.short}}
